@@ -1,5 +1,3 @@
-
-
 var http = require('http');
 var url = require('url');
 var fileSystem = require('fs');
@@ -39,3 +37,4 @@ http.createServer(function (request, response) {
 
 // Console will print the message
 console.log('Server running at http://localhost:3000/index.html');
+
