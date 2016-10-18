@@ -50,15 +50,15 @@ http.createServer(function (request, response) {
 // Console will print the message
 console.log('Server running at http://localhost:3000/index.html');
 
-function reqListener(type) {
-    console.log(type);
+function reqListener() {
+    
     console.log(JSON.parse(this.responseText));
     //displayList('ul.users', JSON.parse(this.responseText));
 }
 function loadAJAX(url) {
     var xmlhttp = new XMLHttpRequest();               
-    xmlhttp.addEventListener('load', reqListener.bind(xmlhttp, 'load'));
-    xmlhttp.addEventListener('error', reqListener.bind(xmlhttp, 'error'));
+    xmlhttp.addEventListener('load', reqListener.bind(xmlhttp));
+    xmlhttp.addEventListener('error', reqListener.bind(xmlhttp));
     xmlhttp.open('GET', url);
     xmlhttp.send();
 }
