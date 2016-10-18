@@ -6,7 +6,9 @@ http.createServer(function (request, response) {
     
     var pathName = url.parse(request.url).pathname;
     var fileName = pathName.substr(1); /* lets remove the "/" from the name */
-    fileName += ".html";
+    if(fileName === "todo"){
+    fileName += ".json";
+    }else{fileName += ".html";}
     /* lets try to read the html page found */
     fileSystem.readFile(fileName , callback);
 
@@ -24,13 +26,23 @@ http.createServer(function (request, response) {
              * HTTP Status: 200 : OK
              * Content Type: text/html 
              */
-            response.writeHead(200, {'Content-Type': 'text/html'}); 
-            response.write(data.toString());
+            if(fileName === "todo.json"){
+                response.writeHead(200, {'Content-Type': 'application/json'}); 
+                response.write(data.toString());
+            }if(fileName === "index.html"){
+                
+                loadAJAX.bind(null, 'http://localhost:3000/todo');
+                response.writeHead(200, {'Content-Type': 'text/html'}); 
+                
+                response.write(data.toString());
+            }
+           
         }     
         
         /* the response is complete */
         response.end();
     }
+
 
    
 }).listen(3000);
@@ -38,3 +50,15 @@ http.createServer(function (request, response) {
 // Console will print the message
 console.log('Server running at http://localhost:3000/index.html');
 
+function reqListener(type) {
+    console.log(type);
+    console.log(JSON.parse(this.responseText));
+    //displayList('ul.users', JSON.parse(this.responseText));
+}
+function loadAJAX(url) {
+    var xmlhttp = new XMLHttpRequest();               
+    xmlhttp.addEventListener('load', reqListener.bind(xmlhttp, 'load'));
+    xmlhttp.addEventListener('error', reqListener.bind(xmlhttp, 'error'));
+    xmlhttp.open('GET', url);
+    xmlhttp.send();
+}
