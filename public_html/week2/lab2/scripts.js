@@ -74,28 +74,28 @@ function createParagraphElement(label, text) {
 }
 
 
-function reqListener(type) {
-    console.log(type);
+function reqListener() {
+    
     displayList('ul.users', JSON.parse(this.responseText));
 }
 
-function userListener(type) {
-    console.log(type);
+function userListener() {
+    
     displayContent('section.featured article', JSON.parse(this.responseText));
 }
 
 function loadNavAJAX(url) {
     var xmlhttp = new XMLHttpRequest();               
-    xmlhttp.addEventListener('load', reqListener.bind(xmlhttp, 'load'));
-    xmlhttp.addEventListener('error', reqListener.bind(xmlhttp, 'error'));
+    xmlhttp.addEventListener('load', reqListener.bind(xmlhttp));
+    xmlhttp.addEventListener('error', reqListener.bind(xmlhttp));
     xmlhttp.open('GET', url);
     xmlhttp.send();
 }
 
 function userAJAX(url) {
     var xmlhttp = new XMLHttpRequest();               
-    xmlhttp.addEventListener('load', userListener.bind(xmlhttp, 'load'));
-    xmlhttp.addEventListener('error', userListener.bind(xmlhttp, 'error'));
+    xmlhttp.addEventListener('load', userListener.bind(xmlhttp));
+    xmlhttp.addEventListener('error', userListener.bind(xmlhttp));
     xmlhttp.open('GET', url);
     xmlhttp.send();
 }
