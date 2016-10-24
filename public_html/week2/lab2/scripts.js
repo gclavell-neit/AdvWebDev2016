@@ -1,4 +1,4 @@
-window.addEventListener('load', loadNavAJAX.bind(null, 'data/users.json'));
+window.addEventListener('load', makeRequest('data/users.json'));
 
 function displayList(selector, list) {
    
@@ -13,7 +13,7 @@ function displayList(selector, list) {
         /* you can set any attribute using the function below for any Created element */
         li.setAttribute('class', 'link');
         /*you can even attach events to the element */
-        li.addEventListener('click', userAJAX.bind(null, 'data/'+value._id+'.json'));
+        li.addEventListener('click', makeRequest.bind(null, 'data/'+value._id+'.json'));
         docfrag.appendChild(li);
     });
     /* after the fragment is completed we can add it to the page */
@@ -24,6 +24,7 @@ function displayContent(selector, item) {
     var dom = document.querySelector(selector);
     var docfrag = document.createDocumentFragment();
     var domImg = document.querySelector('section.featured figure');
+    var domFeatured = document.querySelector('section.featured article');
     /* remove any child elements */
     while (dom.firstChild) {
         dom.removeChild(dom.firstChild);
@@ -53,11 +54,13 @@ function displayContent(selector, item) {
          item.isActive = !item.isActive;
          displayContent(selector, item);
      });
-
+     if(item.isActive === true){
+         domFeatured.setAttribute('class','active');
+     }
+     else{domFeatured.setAttribute('class','inactive');}
+     
     docfrag.appendChild(isActive);
-    dom.appendChild(docfrag);
-    //if(item.isActive === true){console.log(document.querySelector('article')[0].innerHtml());}else{console.log("");}//document.querySelector("article").setAttribute('class', 'active');}
-
+    dom.appendChild(docfrag);   
 }
 
 /* custom function to generate a template for our view */
@@ -74,32 +77,42 @@ function createParagraphElement(label, text) {
 }
 
 
-function reqListener() {
-    
-    displayList('ul.users', JSON.parse(this.responseText));
-}
+function makeRequest(url) {
+            
+    var promise = new Promise( httpPromise );
 
-function userListener() {
-    
-    displayContent('section.featured article', JSON.parse(this.responseText));
-}
+    function httpPromise(resolve, reject) {
+        var httpRequest = new XMLHttpRequest();
 
-function loadNavAJAX(url) {
-    var xmlhttp = new XMLHttpRequest();               
-    xmlhttp.addEventListener('load', reqListener.bind(xmlhttp));
-    xmlhttp.addEventListener('error', reqListener.bind(xmlhttp));
-    xmlhttp.open('GET', url);
-    xmlhttp.send();
-}
+         if ( !httpRequest ) {
+           reject('Cannot create an XMLHTTP instance');
+         }
 
-function userAJAX(url) {
-    var xmlhttp = new XMLHttpRequest();               
-    xmlhttp.addEventListener('load', userListener.bind(xmlhttp));
-    xmlhttp.addEventListener('error', userListener.bind(xmlhttp));
-    xmlhttp.open('GET', url);
-    xmlhttp.send();
-}
+         httpRequest.open('GET', url);
+         httpRequest.send();
 
-//TO DO - Convert the two ajax functions into one function that consumes a context
-//TO DO - Implement promises
-//TO DO - Figure out the stupid crashing issue. Commented out - the final requirement for the lab.
+         httpRequest.addEventListener('load', httpResolve.bind(httpRequest));
+         httpRequest.addEventListener('error', httpReject.bind(httpRequest));
+
+         function httpResolve() {                        
+            if ( this.status >= 200 && this.status < 300 ) {
+                // Performs the function "resolve" when this.status is equal to 2xx
+                if(url === 'data/users.json'){ 
+                    resolve(JSON.parse(this.response));
+                    displayList('ul.users', JSON.parse(this.responseText));
+                }
+                else{displayContent('section.featured article', JSON.parse(this.responseText));}
+            } else {
+                // Performs the function "reject" when this.status is different than 2xx
+                reject(this.statusText);
+            }                          
+         }
+
+         function httpReject() {
+             reject(this.statusText);
+         }
+
+    }
+    // Return the promise
+    return promise;
+    }
