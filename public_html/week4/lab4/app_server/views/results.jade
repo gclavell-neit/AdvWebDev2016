@@ -3,6 +3,13 @@ extends layout
 block content
     h1=title
     p
-        strong #{author}
+        strong Name: 
+        span= name
+    p
+        strong Email: 
+        span= email
+    p
+        strong Comments: 
+        span= comments
     p
         a(href="./form") Back

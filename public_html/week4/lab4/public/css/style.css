@@ -3,3 +3,17 @@ body {
     background-color: #285e8e;
     color: #faebcc;
 }
+.navLinks {
+    text-decoration: none;
+    font-size: 25px;
+    color: #285e8e;
+    margin-left: 10px;
+    margin-right: 10px; 
+    padding-left: 25px;
+    padding-right: 25px;
+    background-color: #FAEBCC;
+}
+.submitButton {
+    background-color: #FAEBCC;
+    margin-top : 10px;
+}

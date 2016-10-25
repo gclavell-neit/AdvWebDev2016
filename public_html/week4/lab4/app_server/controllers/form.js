@@ -9,12 +9,16 @@ function formPost(req, res) {
     if (req.method === 'POST') {
        res.render('results', { 
             title : 'Form Post Page',
-            author: req.body.author
+            name: req.body.name,
+            email: req.body.email,
+            comments: req.body.comments
         });       
     } else {
          res.render('results', { 
             title : 'Form Post Page',
-            author: 'No Author Found'
+            name: 'not found',
+            email: 'not found',
+            comments: 'not found'
         });
     }   
 }
