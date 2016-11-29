@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Review = mongoose.model('Review');
+var reviewDAO = require('../service/reviewsDAO');
 
 function sendJSONresponse(res, status, content) {
     res.status(status);
@@ -9,45 +10,31 @@ function sendJSONresponse(res, status, content) {
 
 module.exports.reviewsReadAll = function(req, res) {
         
-    console.log('Getting all reviews');
-    Review
-     .find()
-     .exec(function(err, results){
-          if ( err ) {
-              sendJSONresponse(res, 404, err);
-          } else {
-              sendJSONresponse(res, 200, results);
-          }
+     reviewDAO.reviewsReadAll().then(function(results) {
+         sendJSONresponse(res, 200, results);
+     }, function(err){
+        sendJSONresponse(res, 404, err);
      });
-
-    
+        
+    console.log('Getting all reviews');
+        
 };
 
 
 
 module.exports.reviewsReadOne = function(req, res) {
     
-    if (req.params && req.params.reviewid) {
-      console.log('Getting single review with id =', req.params.reviewid );
-      Review
-      .findById(req.params.reviewid)
-      .exec(function(err, results){
-
-          if ( results ) {
-             sendJSONresponse(res, 200, results);
-          } else {
-              sendJSONresponse(res, 404, {
-                "message": "reviewid not found"
-              });
-          }
-
-      });
-
-    } else {
+    
+    reviewDAO.reviewsReadOne(req.params.reviewid).then(function(results) {
+         sendJSONresponse(res, 200, results);
+     }, function(err){
         sendJSONresponse(res, 404, {
             "message": "reviewid not found"
         });
-    }
+     });
+    
+    
+   
 };
 
 
@@ -69,7 +56,7 @@ module.exports.reviewsCreate = function(req, res) {
           console.log(err);
           sendJSONresponse(res, 400, err);
         } else {
-          console.log(location);
+          console.log(dataSaved);
           sendJSONresponse(res, 201, dataSaved);
         }
     });
