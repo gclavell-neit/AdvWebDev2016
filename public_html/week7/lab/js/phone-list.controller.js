@@ -9,7 +9,7 @@
     
     function PhoneListController(PhonesService) {
         var vm = this;
-        
+        //declares the empty array, then requests the list of phone objects from the service to fill the array and make it accessible to the view.
         vm.phones = [];
         
         activate();

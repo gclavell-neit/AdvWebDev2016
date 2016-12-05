@@ -6,7 +6,7 @@
         .config(config);
 
     config.$inject = ['$routeProvider'];
-    
+    //Mapping template files and controllers to paths
     function config($routeProvider) {
         $routeProvider
                 .when('/',{
