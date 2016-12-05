@@ -5,16 +5,20 @@
         .module('app')
         .controller('PhoneListController', PhoneListController);
 
-    PhoneListController.$inject = [];
+    PhoneListController.$inject = ['PhonesService'];
     
-    function PhoneListController() {
+    function PhoneListController(PhonesService) {
         var vm = this;
         
         vm.phones = [];
         
         activate();
         
-        function activate(){}
+        function activate(){
+            PhonesService.getPhones().then(function(response){
+                vm.phones = response;
+            });
+        }
     }
      
 })();
