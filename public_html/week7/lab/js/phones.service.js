@@ -9,12 +9,14 @@
     function PhonesService($http, REQUEST){
         
         var url = REQUEST.Phones;
+        //registers the functions accessible through the service. Maps the request to the specific function to be called.
         var service = {
             'getPhones': getPhones,
             'findPhone': findPhone
         };
         return service;
         
+        //
         function getPhones(){
             return $http.get(url)
                     .then(getPhonesComplete, getPhonesFailed);
