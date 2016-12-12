@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1=title
+    p
+        a(href="../add") Add Product
+    p=removed
+    table(border="1" class="table")
+        thead   
+            tr
+                th Product
+                th Description
+                th Price
+       
+        tbody
+        - each stuff in results
+            tr
+                td 
+                    = stuff.product
+                td 
+                    = stuff.description
+                td 
+                    = stuff.price
+                
