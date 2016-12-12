@@ -8,13 +8,18 @@ module.exports.home = function(req, res){
     var msg = '';
     function successCB(){
          res.render('index', { 
-            title: 'home',
+            title: 'Employee Manager Home',
             message : 'Employee Saved'
         });        
     }
     if (req.method === 'POST') {
         console.log(req.body);
-        
+        if(req.body.firstName === "" || req.body.lastName === "" || req.body.department === "" || req.body.startDate === "" || req.body.jobTitle === "" || req.body.salary === ""){
+            res.render('index', { 
+            title: 'Employee Manager Home',
+            message : 'Employee Not Saved. All fields must be filled.'
+        });
+        }else{
         Employee.create({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -26,10 +31,11 @@ module.exports.home = function(req, res){
            // saved!
            successCB();
         });
+    }
               
     } else {
          res.render('index', { 
-            title: 'home',
+            title: 'Employee Manager Home',
             message : msg
         });
     }   
@@ -118,7 +124,7 @@ module.exports.update = function(req, res){
     
          if ( results ) {
             res.render('update', { 
-                title: 'Update Results',
+                title: 'Update',
                 results : results
             });
         } else {
