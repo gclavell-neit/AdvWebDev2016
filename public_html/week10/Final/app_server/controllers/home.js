@@ -1,5 +1,3 @@
-/* GET 'home info' page */
-
 
 var Product = require('../models/product');;
 
@@ -37,9 +35,6 @@ module.exports.add = function(req, res){
 
 module.exports.home = function(req, res){
     
-     var id = req.params.id,
-         removed = '';
- 
     function finish() {     
        Product
        .find()
@@ -48,42 +43,13 @@ module.exports.home = function(req, res){
                res.render('index', { 
                    title: 'Viewing All Products',
                    results : results,
-                   removed : removed
+                   
                });
        });
     }
-    
-     if ( id ) {
-         
-         var removePromise = new Promise(
-            function (resolve, reject) { 
-                
-                Product.remove({ _id: id }, function (err) {
-                   if (!err) {
-                        resolve(' has been removed'); // success
-                    } else {
-                        reject(' has not been removed'); // failure
-                    }
-               });                
-                
-            });
-         
-         
-             removePromise.then(function(result) {
-                 removed = id + result;
-                 finish(); 
-             }, function(result) {
-                 removed = id + result;
-                 finish();  
-             });
-           
-                
-     } else {
+                 
       finish();
-    }
-     
-     
-    
+      
 };
 
 
